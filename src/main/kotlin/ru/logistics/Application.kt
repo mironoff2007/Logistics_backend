@@ -11,14 +11,6 @@ import ru.logistics.security.token.TokenConfig
 
 fun Application.module() {
 
-    val database = Database.connect(
-        url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-        user = "logistics_admin",
-        driver = "org.h2.Driver",
-        password = "1234"
-    )
-    //val dbConnection: Connection = connectToPostgres(false)
-    UserTable.initDb(database)
     val tokenService = JwtTokenService()
     val tokenConfig = TokenConfig(
         issuer = environment.config.property("jwt.issuer").getString(),
@@ -28,7 +20,7 @@ fun Application.module() {
     )
     val hashingService = SHA256HashingService()
     configureSerialization()
-    //configureDatabases()
+    configureDatabases()
     configureSockets()
     configureHTTP()
     configureSecurity(tokenConfig)
