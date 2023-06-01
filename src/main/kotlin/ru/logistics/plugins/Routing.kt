@@ -11,20 +11,17 @@ import ru.logistics.security.token.TokenConfig
 import ru.logistics.security.token.TokenService
 
 fun Application.configureRouting(
-    //userDataSource: UserDataSource,
     hashingService: HashingService,
     tokenService: TokenService,
     tokenConfig: TokenConfig
 ) {
     routing {
-        signIn(//userDataSource,
+        signIn(
             hashingService,
             tokenService,
-            tokenConfig)
-        signUp(
-            hashingService,
-            //userDataSource
+            tokenConfig
         )
+        signUp(hashingService)
         authenticate()
         get("/") {
             call.respondText("Hello World!")

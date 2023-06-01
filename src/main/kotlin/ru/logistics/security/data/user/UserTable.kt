@@ -10,8 +10,8 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
 
     val userId = UserTable.long("user_id").uniqueIndex()
     val name = UserTable.varchar(name = "name", length = 50)
-    val passwordHash = UserTable.varchar(name = "passwordHash", length = 50)
-    val salt = UserTable.varchar(name = "salt", length = 50)
+    val passwordHash = UserTable.varchar(name = "passwordHash", length = 100)
+    val salt = UserTable.varchar(name = "salt", length = 100)
 
     fun initDb(database: Database) {
         transaction(database) {
@@ -27,14 +27,26 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
     }
 
     @Throws
-    fun replace(userEntity: UserEntity) {
+    fun replace(user: User) {
         transaction {
             UserTable.replace {
-                it[userId] = userEntity.sequelId
-                it[name] = userEntity.name
-                it[passwordHash] = userEntity.password
-                it[salt] = userEntity.salt
+                it[userId] = user.id
+                it[name] = user.username
+                it[passwordHash] = user.password
+                it[salt] = user.salt
             }
+        }
+    }
+
+    @Throws
+    fun insert(user: User): ResultRow? {
+        return transaction {
+            return@transaction UserTable.insert {
+                it[userId] = user.id
+                it[name] = user.username
+                it[passwordHash] = user.password
+                it[salt] = user.salt
+            }.resultedValues?.first()
         }
     }
 
@@ -51,7 +63,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
     }
 
     @Throws
-    fun replaceAllTransaction(parcels: List<UserEntity>) {
+    fun replaceAllTransaction(parcels: List<User>) {
         transaction {
             parcels.forEach { user ->
                 replace(user)
@@ -71,9 +83,17 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
         return count
     }
 
-    private fun fromRow(row: ResultRow): UserEntity {
-        val i = row[id]
-        return UserEntity[i]
+    private fun fromRow(row: ResultRow): User {
+        val id = row[userId]
+        val name = row[name]
+        val password = row[passwordHash]
+        val salt = row[salt]
+        return User(
+            id = id,
+            username = name,
+            password = password,
+            salt = salt
+        )
     }
 
     @Throws
@@ -82,7 +102,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
             transaction {
                 UserTable.selectAll().toList()
                     .map {
-                        fromRow(it).toUser()
+                        fromRow(it)
                     }
             }
         } catch (e: Exception) {
@@ -96,7 +116,20 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
             transaction {
                 UserTable.select {
                     userId eq id
-                }.limit(1).single().let { fromRow(it).toUser() }
+                }.limit(1).single().let { fromRow(it) }
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @Throws
+    fun getByName(queryName: String): User? {
+        return try {
+            transaction {
+                UserTable.select {
+                    name eq queryName
+                }.limit(1).single().let { fromRow(it) }
             }
         } catch (e: Exception) {
             null

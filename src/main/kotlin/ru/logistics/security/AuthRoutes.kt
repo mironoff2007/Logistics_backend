@@ -11,6 +11,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
+import org.jetbrains.exposed.sql.insert
+import ru.logistics.security.data.user.UserTable
 import ru.logistics.security.hashing.HashingService
 import ru.logistics.security.hashing.SaltedHash
 import ru.logistics.security.token.TokenClaim
@@ -19,7 +21,6 @@ import ru.logistics.security.token.TokenService
 
 fun Route.signUp(
     hashingService: HashingService,
-    //userDataSource: UserDataSource
 ) {
     post("signup") {
         val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
@@ -28,8 +29,14 @@ fun Route.signUp(
         }
 
         val areFieldsBlank = request.username.isBlank() || request.password.isBlank()
-        val isPwTooShort = request.password.length < 8
+        val isPwTooShort = request.password.length < 4
         if (areFieldsBlank || isPwTooShort) {
+            call.respond(HttpStatusCode.Conflict)
+            return@post
+        }
+
+        val userExists = UserTable.getByName(request.username) != null
+        if (userExists) {
             call.respond(HttpStatusCode.Conflict)
             return@post
         }
@@ -40,18 +47,13 @@ fun Route.signUp(
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
-        val wasAcknowledged = true//userDataSource.insertUser(user)
-        if (!wasAcknowledged) {
-            call.respond(HttpStatusCode.Conflict)
-            return@post
-        }
+        UserTable.insert(user)
 
         call.respond(HttpStatusCode.OK)
     }
 }
 
 fun Route.signIn(
-    //userDataSource: UserDataSource,
     hashingService: HashingService,
     tokenService: TokenService,
     tokenConfig: TokenConfig
@@ -62,12 +64,7 @@ fun Route.signIn(
             return@post
         }
 
-        val user = User(
-            id = 1L,
-            username = "mockUser",
-            password = "none",
-            salt = "none"
-        ) //userDataSource.getUserByUsername(request.username)
+        val user = UserTable.getByName(request.username)
         if (user == null) {
             call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
             return@post
