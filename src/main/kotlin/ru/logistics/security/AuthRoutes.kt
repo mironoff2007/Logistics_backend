@@ -31,13 +31,13 @@ fun Route.signUp(
         val areFieldsBlank = request.username.isBlank() || request.password.isBlank()
         val isPwTooShort = request.password.length < 4
         if (areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict)
+            call.respond(HttpStatusCode.Conflict, "password is too short")
             return@post
         }
 
         val userExists = UserTable.getByName(request.username) != null
         if (userExists) {
-            call.respond(HttpStatusCode.Conflict)
+            call.respond(HttpStatusCode.Conflict, "username ${request.username} already exists")
             return@post
         }
 
