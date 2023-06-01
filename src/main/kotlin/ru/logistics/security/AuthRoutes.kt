@@ -93,9 +93,7 @@ fun Route.signIn(
 
         call.respond(
             status = HttpStatusCode.OK,
-            message = AuthResponse(
-                token = token
-            )
+            message = AuthResponse(token)
         )
     }
 }
