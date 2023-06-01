@@ -13,11 +13,11 @@ fun Application.configureDatabases() {
     
     val database = Database.connect(
             url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-            user = "root",
+            user = "logistics_user",
             driver = "org.h2.Driver",
-            password = ""
+            password = "1234"
         )
-    val dbConnection: Connection = connectToPostgres(embedded = true)
+    val dbConnection: Connection = connectToPostgres(embedded = false)
     val cityService = CityService(dbConnection)
     val userService = UserService(database)
     routing {
