@@ -11,7 +11,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.insert
+import ru.logistics.security.data.responses.Errors
 import ru.logistics.security.data.user.UserTable
 import ru.logistics.security.hashing.HashingService
 import ru.logistics.security.hashing.SaltedHash
@@ -66,7 +66,7 @@ fun Route.signIn(
 
         val user = UserTable.getByName(request.username)
         if (user == null) {
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict, Errors.WrongPasswordOrUser.toErrorResponse())
             return@post
         }
 
@@ -79,7 +79,7 @@ fun Route.signIn(
         )
         if (!isValidPassword) {
             println("Entered hash: ${DigestUtils.sha256Hex("${user.salt}${request.password}")}, Hashed PW: ${user.password}")
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict,  Errors.WrongPasswordOrUser.toErrorResponse())
             return@post
         }
 
