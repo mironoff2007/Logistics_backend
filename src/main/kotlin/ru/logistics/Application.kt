@@ -3,6 +3,7 @@ package ru.logistics
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import ru.logistics.city.cityRouting
+import ru.logistics.parcel.parcelRouting
 import ru.logistics.plugins.*
 import ru.logistics.security.data.user.UserTable
 import ru.logistics.security.hashing.SHA256HashingService
@@ -29,5 +30,6 @@ fun Application.module() {
         tokenService = tokenService,
         tokenConfig = tokenConfig
     )
+    parcelRouting()
     cityRouting()
 }

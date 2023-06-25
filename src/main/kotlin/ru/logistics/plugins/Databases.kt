@@ -8,6 +8,7 @@ import java.sql.*
 import org.jetbrains.exposed.sql.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
+import ru.logistics.parcel.ParcelsTable
 import ru.logistics.security.data.user.UserTable
 
 fun Application.configureDatabases() {
@@ -18,4 +19,5 @@ fun Application.configureDatabases() {
         password = "1234"
     )
     UserTable.initDb(database)
+    ParcelsTable.initDb(database)
 }
