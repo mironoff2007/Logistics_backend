@@ -1,13 +1,8 @@
 package ru.logistics.plugins
 
-import io.ktor.http.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import kotlinx.coroutines.*
-import java.sql.*
+import com.mironov.database.city.CityTable
 import org.jetbrains.exposed.sql.*
 import io.ktor.server.application.*
-import io.ktor.server.routing.*
 import ru.logistics.parcel.ParcelsTable
 import ru.logistics.security.data.user.UserTable
 
@@ -20,4 +15,5 @@ fun Application.configureDatabases() {
     )
     UserTable.initDb(database)
     ParcelsTable.initDb(database)
+    CityTable.initDb(database)
 }

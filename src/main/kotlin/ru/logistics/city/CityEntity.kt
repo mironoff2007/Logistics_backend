@@ -1,6 +1,7 @@
 package ru.logistics.city
 
 
+import com.mironov.database.city.CityTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

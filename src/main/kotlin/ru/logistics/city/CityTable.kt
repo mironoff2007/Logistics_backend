@@ -1,12 +1,19 @@
-package ru.logistics.city
+package com.mironov.database.city
 
 import com.mironov.database.TablesConstants.CITIES_TABLE_NAME
 import com.mironov.database.TablesConstants.selectCountQuery
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.logistics.city.City
+import ru.logistics.city.CityEntity
 
 object CityTable : IntIdTable(CITIES_TABLE_NAME) {
+
+    private val initCities = listOf(
+        City(1, "Moscow"),
+        City(2, "Novgorod")
+    )
 
     val cityId = CityTable.integer("city_id").uniqueIndex()
     val cityName = CityTable.varchar(name = "name", length = 50)
@@ -14,6 +21,9 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
     fun initDb(database: Database) {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(this@CityTable)
+        }
+        transaction(database) {
+            replaceAll(initCities)
         }
     }
 
@@ -25,30 +35,11 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
     }
 
     @Throws
-    fun replace(cityEntity: CityEntity) {
-        transaction {
-            CityTable.replace {
-                it[cityId] = cityEntity.sequelId
-                it[cityName] = cityEntity.name
-            }
-        }
-    }
-
-    @Throws
     fun replaceAll(cities: List<City>) {
         transaction {
             CityTable.batchReplace(cities) {
                 this[cityId] = it.id
                 this[cityName] = it.name
-            }
-        }
-    }
-
-    @Throws
-    fun replaceAllTransaction(parcels: List<CityEntity>) {
-        transaction {
-            parcels.forEach { city ->
-                replace(city)
             }
         }
     }
