@@ -8,10 +8,10 @@ import org.jetbrains.exposed.dao.id.EntityID
 
 class CityEntity(id: EntityID<Int>): IntEntity(id) {
     var name by CityTable.cityName
-    var sequelId by CityTable.cityId
+    var sequelId by CityTable.id
 
     fun toCity(): City {
-        return City(sequelId, name)
+        return City(sequelId.value, name)
     }
 
     companion object: IntEntityClass<CityEntity>(CityTable)

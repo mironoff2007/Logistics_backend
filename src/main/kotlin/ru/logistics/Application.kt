@@ -13,11 +13,17 @@ import ru.logistics.security.token.TokenConfig
 fun Application.module() {
 
     val tokenService = JwtTokenService()
+    var secret = System.getenv("JWT_SECRET")
+    if (secret == null) {
+        println("!!!SECRET IS MISSED, USE DEFAULT, THIS IS OK ONLY FOR TESTING")
+        secret = "test_secret"
+    }
     val tokenConfig = TokenConfig(
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
         expiresIn = 365L * 1000L * 60L * 60L * 24L,
-        secret = System.getenv("JWT_SECRET")
+        secret = secret
+
     )
     val hashingService = SHA256HashingService()
     configureSerialization()

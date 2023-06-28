@@ -15,7 +15,6 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
         City(2, "Novgorod")
     )
 
-    val cityId = CityTable.integer("city_id").uniqueIndex()
     val cityName = CityTable.varchar(name = "name", length = 50)
 
     fun initDb(database: Database) {
@@ -24,7 +23,7 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
         }
         transaction(database) {
             clear()
-            replaceAll(initCities)
+            insertAll(initCities)
         }
     }
 
@@ -39,7 +38,7 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
     fun replaceAll(cities: List<City>) {
         transaction {
             CityTable.batchReplace(cities) {
-                this[cityId] = it.id
+                this[CityTable.id] = it.id
                 this[cityName] = it.name
             }
         }
@@ -81,11 +80,20 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
         return try {
             transaction {
                 CityTable.select {
-                    cityId eq id
+                    CityTable.id eq id
                 }.limit(1).single().let { fromRow(it).toCity() }
             }
         } catch (e: Exception) {
             null
+        }
+    }
+
+    fun insertAll(cities: List<City>) {
+        transaction {
+            CityTable.batchInsert (cities){
+                this[CityTable.id] = it.id
+                this[cityName] = it.name
+            }
         }
     }
 

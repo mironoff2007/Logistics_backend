@@ -81,9 +81,20 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     @Throws
     fun replaceAll(parcels: List<Parcel>) {
         transaction {
-            parcels.forEach { parcel ->
-                replace(parcel)
-            }
+                ParcelsTable.batchReplace(parcels) {
+                    this[parcelId] = it.parcelId
+                    this[customerName] = it.customerName
+                    this[customerSecondName] = it.customerSecondName
+                    this[address] = it.address
+                    this[senderName] = it.senderName
+                    this[senderSecondName] = it.senderSecondName
+                    this[senderAddress] = it.senderAddress
+                    this[date] = it.date
+                    this[dateShow] = it.dateShow
+                    this[destinationCity] = it.destinationCity.id
+                    this[currentCity] = it.currentCity.id
+                    this[senderCity] = it.senderCity.id
+                }
         }
     }
 

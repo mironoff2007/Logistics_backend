@@ -17,3 +17,15 @@ fun Application.configureDatabases() {
     ParcelsTable.initDb(database)
     CityTable.initDb(database)
 }
+
+fun Application.configureDatabasesTest() {
+    val database = Database.connect(
+        url = "jdbc:postgresql://localhost:5432/logistics_test",
+        user = "logistics_admin",
+        driver = "org.postgresql.Driver",
+        password = "1234"
+    )
+    UserTable.initDb(database)
+    ParcelsTable.initDb(database)
+    CityTable.initDb(database)
+}
