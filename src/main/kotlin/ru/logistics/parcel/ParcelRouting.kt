@@ -17,7 +17,7 @@ fun Application.parcelRouting() {
             }
 
             try {
-                ParcelsTable.replaceAllTransaction(request)
+                ParcelsTable.insertAllBatch(request)
                 call.respond(HttpStatusCode.OK)
             }
             catch (e: Exception)

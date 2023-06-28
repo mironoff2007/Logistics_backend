@@ -2,11 +2,12 @@ package ru.logistics.parcel
 
 import com.mironov.database.TablesConstants.PARCELS_TABLE_NAME
 import com.mironov.database.TablesConstants.selectCountQuery
+import com.mironov.database.city.CityTable
 import ru.logistics.andIf
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.logistics.city.City
-import ru.logistics.city.CityTable
+
 
 object ParcelsTable : Table(PARCELS_TABLE_NAME) {
 
@@ -17,9 +18,9 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     private val senderName = ParcelsTable.varchar(name = "sender_name", length = 50)
     private val senderSecondName = ParcelsTable.varchar(name = "sender_second_name", length = 50)
     private val senderAddress = ParcelsTable.varchar(name = "sender_address", length = 150)
-    private val destinationCity = ParcelsTable.reference("destination_city", CityTable)
-    private val senderCity = ParcelsTable.reference("sender_city", CityTable)
-    private val currentCity = ParcelsTable.reference("current_city", CityTable)
+    private val destinationCity = ParcelsTable.reference("destination_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
+    private val senderCity = ParcelsTable.reference("sender_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
+    private val currentCity = ParcelsTable.reference("current_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
     private val dateShow = ParcelsTable.varchar(name = "date_show", length = 50)
     private val date = ParcelsTable.long(name = "date")
 
@@ -58,13 +59,6 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun inTransaction(method: () -> Unit) {
-        transaction {
-            method.invoke()
-        }
-    }
-
-    @Throws
     fun insertAllBatch(parcels: List<Parcel>) {
         transaction {
             ParcelsTable.batchInsert(parcels) {
@@ -85,7 +79,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun replaceAllTransaction(parcels: List<Parcel>) {
+    fun replaceAll(parcels: List<Parcel>) {
         transaction {
             parcels.forEach { parcel ->
                 replace(parcel)

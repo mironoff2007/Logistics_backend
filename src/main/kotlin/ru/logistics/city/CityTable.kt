@@ -23,6 +23,7 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
             SchemaUtils.createMissingTablesAndColumns(this@CityTable)
         }
         transaction(database) {
+            clear()
             replaceAll(initCities)
         }
     }

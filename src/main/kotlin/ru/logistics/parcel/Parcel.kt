@@ -16,6 +16,6 @@ data class Parcel(
     val destinationCity: City,
     val currentCity: City,
     val senderCity: City,
-    val dateShow: String = Date().toString(),
-    val date: Long = Date().time
+    val dateShow: String,
+    val date: Long
 )
