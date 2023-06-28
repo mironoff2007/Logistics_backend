@@ -22,6 +22,9 @@ class DbTest {
             configureDatabasesTest()
 
             ParcelsTable.clear()
+            CityTable.clear()
+            CityTable.populateIfEmpty()
+
             val city = CityTable.fetchAll()[0]
             val parcelSave = Parcel(
                 parcelId = 1L,

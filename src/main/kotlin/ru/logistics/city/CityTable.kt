@@ -21,9 +21,11 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
         transaction(database) {
             SchemaUtils.createMissingTablesAndColumns(this@CityTable)
         }
-        transaction(database) {
-            clear()
-            insertAll(initCities)
+    }
+
+    fun populateIfEmpty() {
+        transaction {
+            if(fetchAll().isEmpty()) insertAll(initCities)
         }
     }
 

@@ -16,6 +16,7 @@ fun Application.configureDatabases() {
     UserTable.initDb(database)
     ParcelsTable.initDb(database)
     CityTable.initDb(database)
+    CityTable.populateIfEmpty()
 }
 
 fun Application.configureDatabasesTest() {
