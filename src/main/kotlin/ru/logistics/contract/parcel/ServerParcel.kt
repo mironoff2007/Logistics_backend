@@ -1,11 +1,10 @@
-package ru.logistics.parcel
+package ru.logistics.contract.parcel
 
 import kotlinx.serialization.Serializable
-import ru.logistics.city.City
-import java.util.Date
+import ru.logistics.routing.city.City
 
 @Serializable
-data class Parcel(
+data class ServerParcel(
     val parcelId: Long,
     val customerName: String,
     val customerSecondName: String,

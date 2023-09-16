@@ -1,4 +1,4 @@
-package ru.logistics.city
+package ru.logistics.routing.city
 
 
 import com.mironov.database.city.CityTable

@@ -3,7 +3,7 @@ package ru.logistics.plugins
 import com.mironov.database.city.CityTable
 import org.jetbrains.exposed.sql.*
 import io.ktor.server.application.*
-import ru.logistics.parcel.ParcelsTable
+import ru.logistics.routing.parcel.ParcelsTable
 import ru.logistics.security.data.user.UserTable
 
 fun Application.configureDatabases() {

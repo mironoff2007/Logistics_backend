@@ -5,8 +5,8 @@ import com.mironov.database.TablesConstants.selectCountQuery
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.logistics.city.City
-import ru.logistics.city.CityEntity
+import ru.logistics.routing.city.City
+import ru.logistics.routing.city.CityEntity
 
 object CityTable : IntIdTable(CITIES_TABLE_NAME) {
 
@@ -77,12 +77,24 @@ object CityTable : IntIdTable(CITIES_TABLE_NAME) {
         }
     }
 
-    @Throws
     fun get(id: Int): City? {
         return try {
             transaction {
                 CityTable.select {
                     CityTable.id eq id
+                }.limit(1).single().let { fromRow(it).toCity() }
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun get(idOrName: String): City? {
+        return try {
+            transaction {
+                CityTable.select {
+                    (CityTable.id eq idOrName.toIntOrNull()) or
+                    (CityTable.cityName eq idOrName)
                 }.limit(1).single().let { fromRow(it).toCity() }
             }
         } catch (e: Exception) {

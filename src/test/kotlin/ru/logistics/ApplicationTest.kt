@@ -6,8 +6,8 @@ import io.ktor.server.testing.*
 import kotlin.test.*
 import io.ktor.http.*
 import io.ktor.server.config.*
-import ru.logistics.city.cityRouting
-import ru.logistics.parcel.parcelRouting
+import ru.logistics.routing.city.cityRouting
+import ru.logistics.routing.parcel.parcelRouting
 import ru.logistics.plugins.*
 import ru.logistics.security.hashing.SHA256HashingService
 import ru.logistics.security.token.JwtTokenService

@@ -23,8 +23,5 @@ fun Application.configureRouting(
         )
         signUp(hashingService)
         authenticate()
-        get("/") {
-            call.respondText("Hello World!")
-        }
     }
 }

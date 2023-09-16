@@ -1,4 +1,4 @@
-package ru.logistics.parcel
+package ru.logistics.routing.parcel
 
 import com.mironov.database.TablesConstants.PARCELS_TABLE_NAME
 import com.mironov.database.TablesConstants.selectCountQuery
@@ -6,7 +6,8 @@ import com.mironov.database.city.CityTable
 import ru.logistics.andIf
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.logistics.city.City
+import ru.logistics.contract.parcel.ServerParcel
+import ru.logistics.routing.city.City
 
 
 object ParcelsTable : Table(PARCELS_TABLE_NAME) {
@@ -39,7 +40,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun replace(parcel: Parcel) {
+    fun replace(parcel: ServerParcel) {
         transaction {
             ParcelsTable.replace {
                 it[parcelId] = parcel.parcelId
@@ -59,7 +60,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun insertAllBatch(parcels: List<Parcel>) {
+    fun insertAllBatch(parcels: List<ServerParcel>) {
         transaction {
             ParcelsTable.batchInsert(parcels) {
                 this[parcelId] = it.parcelId
@@ -79,7 +80,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun replaceAll(parcels: List<Parcel>) {
+    fun replaceAll(parcels: List<ServerParcel>) {
         transaction {
                 ParcelsTable.batchReplace(parcels) {
                     this[parcelId] = it.parcelId
@@ -111,11 +112,11 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    private fun fromRow(row: ResultRow): Parcel {
+    private fun fromRow(row: ResultRow): ServerParcel {
         val destinationCityId = row[destinationCity].value
         val currentCityId = row[currentCity].value
         val senderCityId = row[senderCity].value
-        return Parcel(
+        return ServerParcel(
             parcelId = row[parcelId],
             customerName = row[customerName],
             customerSecondName = row[customerSecondName],
@@ -132,14 +133,14 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun fetchAll(): List<Parcel> {
+    fun fetchAll(): List<ServerParcel> {
         return transaction {
             ParcelsTable.selectAll().toList().map { fromRow(it) }
         }
     }
 
     @Throws
-    fun get(id: Long): Parcel? {
+    fun get(id: Long): ServerParcel? {
         return transaction {
             ParcelsTable.select { parcelId eq id }
                 .limit(1).single().let { fromRow(it) }
@@ -147,7 +148,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     }
 
     @Throws
-    fun selectBetweenDate(start: Long, end: Long): List<Parcel> {
+    fun selectBetweenDate(start: Long, end: Long): List<ServerParcel> {
         return transaction {
             val list = ParcelsTable.select() { (date greater start) and (date lessEq end) }.toList()
             list.map { fromRow(it) }
@@ -159,7 +160,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
         search: String,
         currentCitySearch: City?,
         destinationCitySearch: City?
-    ): List<Parcel> {
+    ): List<ServerParcel> {
         val numb = search.toLongOrNull() ?: 0
         val length = search.length
         var divBy = 1L
@@ -167,9 +168,9 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
             divBy *= 10
         }
         return transaction {
-            val list = ParcelsTable.select() {
+            ParcelsTable.select() {
                 val exp = Op.build {
-                            (customerName like "%$search%") or
+                    (customerName like "%$search%") or
                             (customerSecondName like "%$search%") or
                             (address like "%$search%") or
                             ((parcelId minus numb) mod divBy eq 0)
@@ -179,12 +180,12 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
                     (currentCity eq currentCitySearch?.id)
                 }
                 exp
-            }.toList()
-            list.map { fromRow(it) }
+            }
+                .limit(100)
+                .toList()
+                .map { fromRow(it) }
         }
     }
-
-
 }
 
 
