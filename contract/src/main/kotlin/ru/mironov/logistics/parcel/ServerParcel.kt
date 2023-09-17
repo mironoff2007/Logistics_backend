@@ -1,7 +1,7 @@
-package logistics.parcel
+package ru.mironov.logistics.parcel
 
 import kotlinx.serialization.Serializable
-import logistics.ServerCity
+import ru.mironov.logistics.ServerCity
 
 @Serializable
 data class ServerParcel(

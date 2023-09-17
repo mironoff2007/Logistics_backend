@@ -1,4 +1,4 @@
-package logistics.parcel
+package ru.mironov.logistics.parcel
 
 import kotlinx.serialization.Serializable
 

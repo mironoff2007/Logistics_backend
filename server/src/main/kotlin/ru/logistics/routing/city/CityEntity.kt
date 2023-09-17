@@ -1,7 +1,7 @@
 package ru.logistics.routing.city
 
 
-import logistics.ServerCity
+import ru.mironov.logistics.ServerCity
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID

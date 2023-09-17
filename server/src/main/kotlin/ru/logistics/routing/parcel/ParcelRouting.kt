@@ -8,8 +8,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import logistics.parcel.SearchResponse
-import logistics.parcel.ServerParcel
+import ru.mironov.logistics.parcel.SearchResponse
+import ru.mironov.logistics.parcel.ServerParcel
 
 fun Application.parcelRouting() {
     routing {

@@ -6,9 +6,9 @@ import ru.logistics.routing.city.CityTable
 import ru.logistics.andIf
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import logistics.parcel.ServerParcel
+import ru.mironov.logistics.parcel.ServerParcel
 
-import logistics.ServerCity
+import ru.mironov.logistics.ServerCity
 
 
 object ParcelsTable : Table(PARCELS_TABLE_NAME) {

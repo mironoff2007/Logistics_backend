@@ -1,6 +1,6 @@
 package ru.logistics.routing.city
 
-import logistics.ServerCity
+import ru.mironov.logistics.ServerCity
 import ru.logistics.TablesConstants.CITIES_TABLE_NAME
 import ru.logistics.TablesConstants.selectCountQuery
 import org.jetbrains.exposed.dao.id.IntIdTable
