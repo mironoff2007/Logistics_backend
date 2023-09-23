@@ -1,7 +1,6 @@
 package ru.logistics.security
 
 import ru.logistics.security.data.requests.AuthRequest
-import ru.logistics.security.data.responses.AuthResponse
 import ru.logistics.security.data.user.User
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -18,6 +17,9 @@ import ru.logistics.security.hashing.SaltedHash
 import ru.logistics.security.token.TokenClaim
 import ru.logistics.security.token.TokenConfig
 import ru.logistics.security.token.TokenService
+import ru.mironov.logistics.ServerCity
+import ru.mironov.logistics.auth.AuthResponse
+import ru.mironov.logistics.auth.UserRole
 
 fun Route.signUp(
     hashingService: HashingService,
@@ -91,9 +93,11 @@ fun Route.signIn(
             )
         )
 
+        val userRole = UserRole(0, ServerCity(0, "")) // todo
+
         call.respond(
             status = HttpStatusCode.OK,
-            message = AuthResponse(token)
+            message = AuthResponse(token, userRole)
         )
     }
 }

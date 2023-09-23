@@ -1,9 +1,9 @@
-package ru.logistics.security.token
+package ru.mironov.logistics.auth
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Token(
+data class ServerToken(
     val value: String,
     val expireAt: Long
 )
