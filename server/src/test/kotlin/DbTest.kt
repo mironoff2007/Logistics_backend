@@ -1,10 +1,10 @@
-import ru.logistics.routing.city.CityTable
+import ru.logistics.database.city.CityTable
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
-import ru.logistics.contract.parcel.ServerParcel
-import ru.logistics.routing.parcel.ParcelsTable
+import ru.logistics.database.ParcelsTable
 import ru.logistics.plugins.configureDatabasesTest
 import ru.logistics.plugins.configureSerialization
+import ru.mironov.logistics.parcel.ServerParcel
 import kotlin.test.Test
 
 class DbTest {
@@ -27,6 +27,9 @@ class DbTest {
                 customerName = "",
                 customerSecondName = "",
                 address = "",
+                senderName = "",
+                senderSecondName = "",
+                senderAddress = "",
                 destinationCity = city,
                 currentCity = city,
                 senderCity = city,

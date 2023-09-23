@@ -1,6 +1,6 @@
-package ru.logistics.routing.parcel
+package ru.logistics.routing
 
-import ru.logistics.routing.city.CityTable
+import ru.logistics.database.city.CityTable
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -8,6 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ru.logistics.database.ParcelsTable
 import ru.mironov.logistics.parcel.SearchResponse
 import ru.mironov.logistics.parcel.ServerParcel
 

@@ -1,8 +1,8 @@
-package ru.logistics.routing.city
+package ru.logistics.database.city
 
 import ru.mironov.logistics.ServerCity
-import ru.logistics.TablesConstants.CITIES_TABLE_NAME
-import ru.logistics.TablesConstants.selectCountQuery
+import ru.logistics.database.TablesConstants.CITIES_TABLE_NAME
+import ru.logistics.database.TablesConstants.selectCountQuery
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction

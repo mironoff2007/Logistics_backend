@@ -2,8 +2,8 @@ package ru.logistics
 
 import io.ktor.server.application.*
 import ru.logistics.plugins.*
-import ru.logistics.routing.city.cityRouting
-import ru.logistics.routing.parcel.parcelRouting
+import ru.logistics.routing.cityRouting
+import ru.logistics.routing.parcelRouting
 import ru.logistics.security.hashing.SHA256HashingService
 import ru.logistics.security.token.JwtTokenService
 import ru.logistics.security.token.TokenConfig

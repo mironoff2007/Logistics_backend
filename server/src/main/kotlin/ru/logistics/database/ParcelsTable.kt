@@ -1,11 +1,11 @@
-package ru.logistics.routing.parcel
+package ru.logistics.database
 
-import ru.logistics.TablesConstants.PARCELS_TABLE_NAME
-import ru.logistics.TablesConstants.selectCountQuery
-import ru.logistics.routing.city.CityTable
+import ru.logistics.database.TablesConstants.PARCELS_TABLE_NAME
+import ru.logistics.database.TablesConstants.selectCountQuery
 import ru.logistics.andIf
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.logistics.database.city.CityTable
 import ru.mironov.logistics.parcel.ServerParcel
 
 import ru.mironov.logistics.ServerCity

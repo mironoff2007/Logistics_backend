@@ -1,10 +1,11 @@
-package ru.logistics.routing.city
+package ru.logistics.routing
 
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ru.logistics.database.city.CityTable
 import ru.mironov.logistics.ServerCity
 
 fun Application.cityRouting() {

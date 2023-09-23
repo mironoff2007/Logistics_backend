@@ -4,13 +4,14 @@ import io.ktor.server.testing.*
 import kotlin.test.*
 import io.ktor.http.*
 import io.ktor.server.config.*
-import ru.logistics.routing.city.cityRouting
-import ru.logistics.routing.parcel.parcelRouting
+import ru.logistics.routing.cityRouting
+import ru.logistics.routing.parcelRouting
 import ru.logistics.plugins.*
 import ru.logistics.security.hashing.SHA256HashingService
 import ru.logistics.security.token.JwtTokenService
 import ru.logistics.security.token.TokenConfig
 
+//todo fix
 class ApplicationTest {
     @Test
     fun testRoot() = testApplication {
@@ -29,7 +30,6 @@ class ApplicationTest {
                 audience = "test_audience",
                 expiresIn = 10L * 1000L,
                 secret = secret
-
             )
             val hashingService = SHA256HashingService()
             configureSerialization()

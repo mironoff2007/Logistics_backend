@@ -1,6 +1,6 @@
 package ru.logistics.security
 
-import ru.logistics.security.data.requests.AuthRequest
+import ru.mironov.logistics.auth.AuthRequest
 import ru.logistics.security.data.user.User
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -11,7 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import ru.logistics.security.data.responses.Errors
-import ru.logistics.security.data.user.UserTable
+import ru.logistics.database.user.UserTable
 import ru.logistics.security.hashing.HashingService
 import ru.logistics.security.hashing.SaltedHash
 import ru.logistics.security.token.TokenClaim

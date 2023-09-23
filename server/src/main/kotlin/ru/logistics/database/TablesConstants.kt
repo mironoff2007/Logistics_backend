@@ -1,4 +1,4 @@
-package ru.logistics
+package ru.logistics.database
 
 object TablesConstants {
 

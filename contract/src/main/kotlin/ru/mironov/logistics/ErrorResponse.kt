@@ -1,4 +1,4 @@
-package ru.logistics.security.data.responses
+package ru.mironov.logistics
 
 import kotlinx.serialization.Serializable
 

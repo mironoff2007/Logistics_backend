@@ -1,10 +1,11 @@
-package ru.logistics.security.data.user
+package ru.logistics.database.user
 
-import ru.logistics.TablesConstants.USERS_TABLE_NAME
-import ru.logistics.TablesConstants.selectCountQuery
+import ru.logistics.database.TablesConstants.USERS_TABLE_NAME
+import ru.logistics.database.TablesConstants.selectCountQuery
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.logistics.security.data.user.User
 
 object UserTable : IntIdTable(USERS_TABLE_NAME) {
 

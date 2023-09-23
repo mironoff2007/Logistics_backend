@@ -1,10 +1,10 @@
 package ru.logistics.plugins
 
-import ru.logistics.routing.city.CityTable
+import ru.logistics.database.city.CityTable
 import org.jetbrains.exposed.sql.*
 import io.ktor.server.application.*
-import ru.logistics.routing.parcel.ParcelsTable
-import ru.logistics.security.data.user.UserTable
+import ru.logistics.database.ParcelsTable
+import ru.logistics.database.user.UserTable
 
 fun Application.configureDatabases() {
     val database = Database.connect(
