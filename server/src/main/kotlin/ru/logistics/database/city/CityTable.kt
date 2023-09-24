@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object CityTable : IntIdTable(CITIES_TABLE_NAME) {
 
-    private val initCities = listOf(
+    val initCities = listOf(
         ServerCity(1, "Moscow"),
         ServerCity(2, "Novgorod")
     )

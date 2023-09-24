@@ -1,5 +1,7 @@
 package ru.logistics.security.data.user
 
+import ru.mironov.logistics.ServerCity
+import ru.mironov.logistics.UserRole
 import java.util.Date
 
 data class User(
@@ -7,4 +9,6 @@ data class User(
     val username: String,
     val password: String,
     val salt: String,
+    val role: UserRole,
+    val location: ServerCity,
 )

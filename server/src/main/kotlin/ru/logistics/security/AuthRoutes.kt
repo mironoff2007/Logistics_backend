@@ -10,6 +10,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
+import ru.logistics.database.city.CityTable
 import ru.logistics.security.data.responses.Errors
 import ru.logistics.database.user.UserTable
 import ru.logistics.security.hashing.HashingService
@@ -17,21 +18,24 @@ import ru.logistics.security.hashing.SaltedHash
 import ru.logistics.security.token.TokenClaim
 import ru.logistics.security.token.TokenConfig
 import ru.logistics.security.token.TokenService
-import ru.mironov.logistics.ServerCity
+import ru.mironov.logistics.UserRole
 import ru.mironov.logistics.auth.AuthResponse
-import ru.mironov.logistics.auth.UserRole
+import ru.mironov.logistics.auth.RegisterUserRequest
+import ru.mironov.logistics.auth.UserData
 
 fun Route.signUp(
     hashingService: HashingService,
 ) {
     post("signup") {
-        val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
+        val request = call.receiveNullable<RegisterUserRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
 
         val areFieldsBlank = request.username.isBlank() || request.password.isBlank()
         val isPwTooShort = request.password.length < 4
+        val city = CityTable.get(request.location)
+        val role = UserRole.valueOf(request.role)
         if (areFieldsBlank || isPwTooShort) {
             call.respond(HttpStatusCode.Conflict, "password is too short")
             return@post
@@ -47,7 +51,8 @@ fun Route.signUp(
         val user = User(
             username = request.username,
             password = saltedHash.hash,
-            salt = saltedHash.salt
+            salt = saltedHash.salt,
+            role = role, location = city ?: CityTable.initCities.first()
         )
         UserTable.insert(user)
 
@@ -93,11 +98,11 @@ fun Route.signIn(
             )
         )
 
-        val userRole = UserRole(0, ServerCity(0, "")) // todo
+        val userData = UserData(location = user.location, role = user.role)
 
         call.respond(
             status = HttpStatusCode.OK,
-            message = AuthResponse(token, userRole)
+            message = AuthResponse(token, userData)
         )
     }
 }
