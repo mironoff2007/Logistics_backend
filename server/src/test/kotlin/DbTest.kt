@@ -11,12 +11,9 @@ class DbTest {
     @Test
     fun testRoot() = testApplication {
         environment {
-            config = MapApplicationConfig("ktor.environment" to "test")
+            config = ApplicationConfig(Config.TEST_CONFIG)
         }
         application {
-            configureSerialization()
-            configureDatabasesTest()
-
             ParcelsTable.clear()
             CityTable.clear()
             CityTable.populateIfEmpty()
@@ -47,12 +44,9 @@ class DbTest {
     @Test
     fun find_city_by_name_or_id_test() = testApplication {
         environment {
-            config = MapApplicationConfig("ktor.environment" to "test")
+            config = ApplicationConfig(Config.TEST_CONFIG)
         }
         application {
-            configureSerialization()
-            configureDatabasesTest()
-
             ParcelsTable.clear()
             CityTable.clear()
             CityTable.populateIfEmpty()

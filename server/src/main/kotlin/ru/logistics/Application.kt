@@ -11,23 +11,18 @@ import ru.logistics.security.token.TokenConfig
 fun Application.module() {
 
     val tokenService = JwtTokenService()
-    var secret = System.getenv("JWT_SECRET")
-    if (secret == null) {
-        println("!!!SECRET IS MISSED, USE DEFAULT, THIS IS OK ONLY FOR TESTING")
-        secret = "test_secret"
-    }
+    val secret = environment.config.property("jwt.secret").getString()
     val tokenConfig = TokenConfig(
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
         expiresIn = 365L * 1000L * 60L * 60L * 24L,
         secret = secret
-
     )
     val hashingService = SHA256HashingService()
+
     configureSerialization()
-    configureDatabases()
-    configureSockets()
     configureHTTP()
+    configureSockets()
     configureSecurity(tokenConfig)
     configureRouting(
         hashingService = hashingService,
@@ -36,4 +31,17 @@ fun Application.module() {
     )
     parcelRouting()
     cityRouting()
+
+    if (isTest()) {
+        configureDatabasesTest()
+    } else {
+        configureDatabases()
+    }
 }
+
+fun Application.isTest() = try {
+    environment.config.property("test").getString() == "true"
+} catch (e: Exception) {
+    false
+}
+
