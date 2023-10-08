@@ -14,6 +14,7 @@ import ru.mironov.logistics.ServerCity
 object ParcelsTable : Table(PARCELS_TABLE_NAME) {
 
     private val parcelId = ParcelsTable.long("parcel_id").uniqueIndex()
+    private val storeId = ParcelsTable.long("store_id").default(0)
     private val customerName = ParcelsTable.varchar(name = "customer_name", length = 50)
     private val customerSecondName = ParcelsTable.varchar(name = "customer_second_name", length = 50)
     private val address = ParcelsTable.varchar(name = "customer_address", length = 150)
@@ -45,6 +46,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
         transaction {
             ParcelsTable.replace {
                 it[parcelId] = parcel.parcelId
+                it[storeId] = parcel.storeId
                 it[customerName] = parcel.customerName
                 it[customerSecondName] = parcel.customerSecondName
                 it[address] = parcel.address
@@ -65,6 +67,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
         transaction {
             ParcelsTable.batchInsert(parcels) {
                 this[parcelId] = it.parcelId
+                this[storeId] = it.storeId
                 this[customerName] = it.customerName
                 this[customerSecondName] = it.customerSecondName
                 this[address] = it.address
@@ -85,6 +88,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
         transaction {
                 ParcelsTable.batchReplace(parcels) {
                     this[parcelId] = it.parcelId
+                    this[storeId] = it.storeId
                     this[customerName] = it.customerName
                     this[customerSecondName] = it.customerSecondName
                     this[address] = it.address
@@ -119,6 +123,7 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
         val senderCityId = row[senderCity].value
         return ServerParcel(
             parcelId = row[parcelId],
+            storeId = row[storeId],
             customerName = row[customerName],
             customerSecondName = row[customerSecondName],
             address = row[address],
