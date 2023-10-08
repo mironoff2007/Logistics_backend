@@ -8,12 +8,13 @@ import ru.logistics.security.data.user.User
 import ru.mironov.logistics.UserRole
 
 class UserEntity(id: EntityID<Int>): IntEntity(id) {
-    var name by UserTable.name
-    var sequelId by UserTable.userId
-    var password by UserTable.passwordHash
-    var salt by UserTable.salt
-    var role by UserTable.role
-    var loca by UserTable.location
+    private var name by UserTable.name
+    private var userStoreId by UserTable.userStoreId
+    private var sequelId by UserTable.userId
+    private var password by UserTable.passwordHash
+    private var salt by UserTable.salt
+    private var role by UserTable.role
+    private var location by UserTable.location
 
     fun toUser(): User {
         val roleEnum = try {
@@ -25,11 +26,12 @@ class UserEntity(id: EntityID<Int>): IntEntity(id) {
         }
         return User(
             id = sequelId,
+            userStoreId = userStoreId,
             username = name,
             password = password,
             salt = salt,
             role = roleEnum,
-            location = CityTable.get(loca.value) ?: CityTable.initCities.first()
+            location = CityTable.get(location.value) ?: CityTable.initCities.first()
         )
     }
 

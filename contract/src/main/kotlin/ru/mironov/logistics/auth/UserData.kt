@@ -6,6 +6,8 @@ import ru.mironov.logistics.UserRole
 
 @Serializable
 data class UserData(
+    val userId: Long,
+    val userStoreId: Long,
     val location: ServerCity,
-    var role: UserRole
+    val role: UserRole,
 )

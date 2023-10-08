@@ -7,6 +7,7 @@ import java.util.Date
 data class User(
     val id: Long = Date().time,
     val username: String,
+    val userStoreId: Long,
     val password: String,
     val salt: String,
     val role: UserRole,

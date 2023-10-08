@@ -16,6 +16,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
 
     val userId = UserTable.long("user_id").uniqueIndex()
     val name = UserTable.varchar(name = "name", length = 50)
+    val userStoreId = UserTable.long(name = "userStoreId").default(0L)
     val passwordHash = UserTable.varchar(name = "passwordHash", length = 100)
     val salt = UserTable.varchar(name = "salt", length = 100)
     val role = UserTable.varchar(name = "role", length = 100).default(UserRole.COURIER.name)
@@ -47,6 +48,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
         transaction {
             UserTable.replace {
                 it[userId] = user.id
+                it[userStoreId] = user.userStoreId
                 it[name] = user.username
                 it[passwordHash] = user.password
                 it[salt] = user.salt
@@ -62,6 +64,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
         return transaction {
             return@transaction UserTable.insert {
                 it[userId] = user.id
+                it[userStoreId] = user.userStoreId
                 it[name] = user.username
                 it[passwordHash] = user.password
                 it[salt] = user.salt
@@ -76,6 +79,7 @@ object UserTable : IntIdTable(USERS_TABLE_NAME) {
         transaction {
             UserTable.batchReplace(cities) {
                 this[userId] = it.id
+                this[userStoreId] = it.userStoreId
                 this[name] = it.username
                 this[passwordHash] = it.password
                 this[salt] = it.salt

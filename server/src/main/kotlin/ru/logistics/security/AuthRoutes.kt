@@ -52,7 +52,9 @@ fun Route.signUp(
             username = request.username,
             password = saltedHash.hash,
             salt = saltedHash.salt,
-            role = role, location = city ?: CityTable.initCities.first()
+            role = role,
+            location = city ?: CityTable.initCities.first(),
+            userStoreId = request.userStoreId
         )
         UserTable.insert(user)
 
@@ -98,7 +100,12 @@ fun Route.signIn(
             )
         )
 
-        val userData = UserData(location = user.location, role = user.role)
+        val userData = UserData(
+            userId = user.id,
+            userStoreId = user.userStoreId,
+            location = user.location,
+            role = user.role
+        )
 
         call.respond(
             status = HttpStatusCode.OK,

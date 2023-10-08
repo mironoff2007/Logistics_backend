@@ -6,4 +6,8 @@ import kotlinx.serialization.Serializable
 data class ServerToken(
     val value: String,
     val expireAt: Long
-)
+) {
+    override fun toString(): String {
+        return "token expire at $expireAt"
+    }
+}
