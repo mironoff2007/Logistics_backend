@@ -37,6 +37,7 @@ fun Application.parcelRouting() {
                     val searchBy = call.parameters[SearchResponse.SEARCH_QUERY_TAG] ?: ""
                     val fromCityId = call.parameters[SearchResponse.SEARCH_FROM_CITY_TAG] ?: ""
                     val toCityId = call.parameters[SearchResponse.SEARCH_TO_CITY_TAG] ?: ""
+                    val storeId = call.parameters[SearchResponse.SEARCH_STORE_ID_TAG]?.toLongOrNull()
 
                     val cityFrom = CityTable.get(fromCityId)
                     val cityTo = CityTable.get(toCityId)
@@ -44,7 +45,8 @@ fun Application.parcelRouting() {
                     val parcels = ParcelsTable.selectSearch(
                         search = searchBy,
                         currentCitySearch = cityFrom,
-                        destinationCitySearch = cityTo
+                        destinationCitySearch = cityTo,
+                        storeIdSearch = storeId
                     )
                     val response = SearchResponse(parcels = parcels, page = 0)
                     val json = Json.encodeToString<SearchResponse>(response)

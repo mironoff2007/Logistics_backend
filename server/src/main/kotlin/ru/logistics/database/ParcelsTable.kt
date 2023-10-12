@@ -21,9 +21,24 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     private val senderName = ParcelsTable.varchar(name = "sender_name", length = 50)
     private val senderSecondName = ParcelsTable.varchar(name = "sender_second_name", length = 50)
     private val senderAddress = ParcelsTable.varchar(name = "sender_address", length = 150)
-    private val destinationCity = ParcelsTable.reference("destination_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
-    private val senderCity = ParcelsTable.reference("sender_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
-    private val currentCity = ParcelsTable.reference("current_city", CityTable, onDelete = ReferenceOption.NO_ACTION, onUpdate = ReferenceOption.NO_ACTION)
+    private val destinationCity = ParcelsTable.reference(
+        "destination_city",
+        CityTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    )
+    private val senderCity = ParcelsTable.reference(
+        "sender_city",
+        CityTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    )
+    private val currentCity = ParcelsTable.reference(
+        "current_city",
+        CityTable,
+        onDelete = ReferenceOption.NO_ACTION,
+        onUpdate = ReferenceOption.NO_ACTION
+    )
     private val dateShow = ParcelsTable.varchar(name = "date_show", length = 50)
     private val date = ParcelsTable.long(name = "date")
 
@@ -86,21 +101,21 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     @Throws
     fun replaceAll(parcels: List<ServerParcel>) {
         transaction {
-                ParcelsTable.batchReplace(parcels) {
-                    this[parcelId] = it.parcelId
-                    this[storeId] = it.storeId
-                    this[customerName] = it.customerName
-                    this[customerSecondName] = it.customerSecondName
-                    this[address] = it.address
-                    this[senderName] = it.senderName
-                    this[senderSecondName] = it.senderSecondName
-                    this[senderAddress] = it.senderAddress
-                    this[date] = it.date
-                    this[dateShow] = it.dateShow
-                    this[destinationCity] = it.destinationCity.id
-                    this[currentCity] = it.currentCity.id
-                    this[senderCity] = it.senderCity.id
-                }
+            ParcelsTable.batchReplace(parcels) {
+                this[parcelId] = it.parcelId
+                this[storeId] = it.storeId
+                this[customerName] = it.customerName
+                this[customerSecondName] = it.customerSecondName
+                this[address] = it.address
+                this[senderName] = it.senderName
+                this[senderSecondName] = it.senderSecondName
+                this[senderAddress] = it.senderAddress
+                this[date] = it.date
+                this[dateShow] = it.dateShow
+                this[destinationCity] = it.destinationCity.id
+                this[currentCity] = it.currentCity.id
+                this[senderCity] = it.senderCity.id
+            }
         }
     }
 
@@ -127,8 +142,8 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
             customerName = row[customerName],
             customerSecondName = row[customerSecondName],
             address = row[address],
-            senderName= row [senderAddress],
-            senderSecondName = row [senderSecondName],
+            senderName = row[senderAddress],
+            senderSecondName = row[senderSecondName],
             senderAddress = row[senderAddress],
             dateShow = row[dateShow],
             date = row[date],
@@ -165,7 +180,8 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
     fun selectSearch(
         search: String,
         currentCitySearch: ServerCity?,
-        destinationCitySearch: ServerCity?
+        destinationCitySearch: ServerCity?,
+        storeIdSearch: Long?
     ): List<ServerParcel> {
         val numb = search.toLongOrNull() ?: 0
         val length = search.length
@@ -184,6 +200,8 @@ object ParcelsTable : Table(PARCELS_TABLE_NAME) {
                     (destinationCity eq destinationCitySearch?.id)
                 }.andIf(currentCitySearch != null) {
                     (currentCity eq currentCitySearch?.id)
+                }.andIf(storeIdSearch != null) {
+                    (storeId eq storeIdSearch!!)
                 }
                 exp
             }
