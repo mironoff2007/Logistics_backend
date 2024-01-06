@@ -31,7 +31,8 @@ class DbTest {
                 currentCity = city,
                 senderCity = city,
                 dateShow = "date",
-                date = System.currentTimeMillis()
+                date = System.currentTimeMillis(),
+                storeId = 0L
             )
             val parcels = listOf(parcelSave)
 
