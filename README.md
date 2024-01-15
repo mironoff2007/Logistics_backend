@@ -4,7 +4,7 @@ TODO
 
 register user
 http://localhost:8080/signup
-body
+body:
 {
   "username":"courier",
   "password":"1111",
