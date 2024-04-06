@@ -15,7 +15,7 @@ fun Application.module() {
     val tokenConfig = TokenConfig(
         issuer = environment.config.property("jwt.issuer").getString(),
         audience = environment.config.property("jwt.audience").getString(),
-        expiresIn = 365L * 1000L * 60L * 60L * 24L,
+        expiresIn = environment.config.property("jwt.timeout").getString().toLong(),
         secret = secret
     )
     val hashingService = SHA256HashingService()
